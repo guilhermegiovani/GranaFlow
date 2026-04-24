@@ -37,6 +37,8 @@ yarn-error.*
 *.tsbuildinfo
 
 app-example
+
+# Local files
 CONVERSATION_HISTORY.md
 
 # generated native folders
