@@ -2,7 +2,7 @@
 
 ## 🎯 Visão Geral
 
-Aplicativo mobile para controle de gastos de entregadores (Shopee, etc.), desenvolvido com **Expo + React Native + TypeScript**.
+Aplicativo mobile de controle financeiro pessoal feito com Expo (React Native). Permite registrar ganhos e despesas, visualizar saldo e exportar dados em Excel, desenvolvido com **Expo + React Native + TypeScript**
 
 ### 📦 Versão Recomendada do React Native
 
