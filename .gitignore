@@ -37,6 +37,7 @@ yarn-error.*
 *.tsbuildinfo
 
 app-example
+CONVERSATION_HISTORY.md
 
 # generated native folders
 /ios
