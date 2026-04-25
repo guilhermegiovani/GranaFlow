@@ -1,6 +1,7 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 // Importa os tipos que criamos (Expense, ExpensesContextType, etc)
 import { Expense, ExpensesContextType, ExpensesProviderProps } from "../types/index";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // createContext cria um "container" para compartilhar dados entre components
 // Agora tipamos com ExpensesContextType para validação de tipos
@@ -30,12 +31,13 @@ export function ExpensesProvider({ children }: ExpensesProviderProps) {
   // Promise<void> = não retorna nada, mas é assíncrona
   const loadExpensesFromStorage = useCallback(async (): Promise<void> => {
     try {
-      let savedExpenses: string | null = null;
+      //let savedExpenses: string | null = null;
 
       // Verifica se localStorage está disponível
-      if (typeof window !== "undefined" && window.localStorage) {
-        savedExpenses = window.localStorage.getItem("expenses");
-      }
+      // if (typeof window !== "undefined" && window.localStorage) {
+      //   savedExpenses = window.localStorage.getItem("expenses");
+      // }
+      const savedExpenses = await AsyncStorage.getItem("expenses");
 
       // Se existem dados salvos, converte de volta para objeto e carrega
       if (savedExpenses) {
@@ -61,11 +63,12 @@ export function ExpensesProvider({ children }: ExpensesProviderProps) {
       const jsonData = JSON.stringify(expensesData);
 
       // Verifica se localStorage está disponível antes de usar
-      if (typeof window !== "undefined" && window.localStorage) {
-        window.localStorage.setItem("expenses", jsonData);
-      } else {
-        console.warn("localStorage não disponível neste ambiente");
-      }
+      // if (typeof window !== "undefined" && window.localStorage) {
+      //   window.localStorage.setItem("expenses", jsonData);
+      // } else {
+      //   console.warn("localStorage não disponível neste ambiente");
+      // }
+      await AsyncStorage.setItem("expenses", jsonData);
     } catch (error) {
       // Se houver erro ao salvar, mostra no console
       console.error("Erro ao salvar despesas:", error);
