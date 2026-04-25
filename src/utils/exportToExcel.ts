@@ -57,6 +57,17 @@ export const exportToExcel = async (expenses: Expense[]): Promise<void> => {
 
     // CRIAÇÃO: Cria um novo workbook (arquivo Excel)
     const worksheet = XLSX.utils.json_to_sheet(formattedData);
+
+    const range = XLSX.utils.decode_range(worksheet["!ref"]!);
+
+    for (let row = 1; row <= range.e.r; row++) {
+      const cellAddress = XLSX.utils.encode_cell({ r: row, c: 4 });
+
+      if (worksheet[cellAddress]) {
+        worksheet[cellAddress].z = '"R$" * #,##0.00'; // '"R$"#,##0.00'
+      }
+    }
+
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Gastos");
 
@@ -75,11 +86,17 @@ export const exportToExcel = async (expenses: Expense[]): Promise<void> => {
     const summaryStartRow: number = formattedData.length + 3;
     worksheet[`A${summaryStartRow}`] = "RESUMO";
     worksheet[`A${summaryStartRow + 1}`] = "Total Ganho:";
-    worksheet[`B${summaryStartRow + 1}`] = totalIncome;
+    worksheet[`B${summaryStartRow + 1}`] = { v: totalIncome, t: "n" };
+    //worksheet[`B${summaryStartRow + 1}`] = totalIncome;
     worksheet[`A${summaryStartRow + 2}`] = "Total Gasto:";
-    worksheet[`B${summaryStartRow + 2}`] = totalExpense;
+    worksheet[`B${summaryStartRow + 2}`] = { v: totalExpense, t: "n" };
+    //worksheet[`B${summaryStartRow + 2}`] = totalExpense;
     worksheet[`A${summaryStartRow + 3}`] = "LUCRO LÍQUIDO:";
-    worksheet[`B${summaryStartRow + 3}`] = profit;
+    worksheet[`B${summaryStartRow + 3}`] = { v: profit, t: "n" };
+    //worksheet[`B${summaryStartRow + 3}`] = profit;
+    worksheet[`B${summaryStartRow + 1}`].z = '"R$" * #,##0.00';
+    worksheet[`B${summaryStartRow + 2}`].z = '"R$" * #,##0.00';
+    worksheet[`B${summaryStartRow + 3}`].z = '"R$" * #,##0.00';
 
     // NOMEAÇÃO: Cria nome do arquivo com data atual
     // toLocaleDateString gera string como "21/04/2026"

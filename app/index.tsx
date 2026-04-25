@@ -58,20 +58,26 @@ export default function Home() {
                     {/* Calcula total de ganhos */}
                     <Text style={{ fontSize: 12, color: "#666", marginBottom: 5 }}>
                         💰 Total Ganhos: <Text style={{ fontWeight: "bold", color: "#4CAF50" }}>
-                            R$ {expenses
+                            {expenses
                                 .filter((e: any) => e.type === "income")
                                 .reduce((sum: number, e: any) => sum + e.value, 0)
-                                .toFixed(2)}
+                                .toLocaleString("pt-BR", {
+                                    style: "currency",
+                                    currency: "BRL",
+                                })}
                         </Text>
                     </Text>
 
                     {/* Calcula total de gastos */}
                     <Text style={{ fontSize: 12, color: "#666", marginBottom: 5 }}>
                         💸 Total Gastos: <Text style={{ fontWeight: "bold", color: "#f44336" }}>
-                            R$ {expenses
+                            {expenses
                                 .filter((e: any) => e.type === "expense")
                                 .reduce((sum: number, e: any) => sum + e.value, 0)
-                                .toFixed(2)}
+                                .toLocaleString("pt-BR", {
+                                    style: "currency",
+                                    currency: "BRL",
+                                })}
                         </Text>
                     </Text>
 
@@ -87,13 +93,16 @@ export default function Home() {
                                 ? "#4CAF50"
                                 : "#f44336",
                         }}>
-                            R$ {(expenses
+                            {(expenses
                                 .filter((e: any) => e.type === "income")
                                 .reduce((sum: number, e: any) => sum + e.value, 0) -
                                 expenses
                                     .filter((e: any) => e.type === "expense")
                                     .reduce((sum: number, e: any) => sum + e.value, 0))
-                                .toFixed(2)}
+                                .toLocaleString("pt-BR", {
+                                    style: "currency",
+                                    currency: "BRL",
+                                })}
                         </Text>
                     </Text>
                 </View>
@@ -149,7 +158,10 @@ export default function Home() {
                                             color: item.type === "expense" ? "#f44336" : "#4CAF50",
                                         }}
                                     >
-                                        {item.type === "expense" ? "-" : "+"}R$ {item.value.toFixed(2)}
+                                        {item.type === "expense" ? "-" : "+"}{item.value.toLocaleString("pt-BR", {
+                                            style: "currency",
+                                            currency: "BRL",
+                                        })}
                                     </Text>
                                 </View>
 
