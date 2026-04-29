@@ -5,6 +5,7 @@ import { ExpensesContext } from "../src/context/ExpensesContext";
 import { exportToExcel } from "../src/utils/exportToExcel";
 // Importa os tipos que criamos
 import { Expense, ExpensesContextType } from "../src/types/index";
+import { getMonthlyExpenses, getWeeklyExpenses, sumByType } from "../src/utils/dateFilters";
 
 export default function Home() {
     // Pega o router para navegar entre telas
@@ -16,6 +17,50 @@ export default function Home() {
     const { expenses, deleteExpense, isLoading } = useContext(
         ExpensesContext
     ) as ExpensesContextType;
+
+    const monthlyExpenses = getMonthlyExpenses(expenses);
+    const weeklyExpenses = getWeeklyExpenses(expenses);
+
+    const monthlyIncome = sumByType(monthlyExpenses, "income");
+    const monthlyExpense = sumByType(monthlyExpenses, "expense");
+
+    const weeklyIncome = sumByType(weeklyExpenses, "income");
+    const weeklyExpense = sumByType(weeklyExpenses, "expense");
+
+    const getMonthName = () => {
+        const month = new Date().toLocaleDateString("pt-BR", {
+            month: "long",
+            year: "numeric",
+        })
+
+        return month.charAt(0).toUpperCase() + month.slice(1)
+    }
+
+    const monthCard = {
+        backgroundColor: "#f5f5f5",
+        padding: 15,
+        borderRadius: 10,
+        marginBottom: 15,
+        borderLeftWidth: 4,
+        flex: 1,
+        borderLeftColor: "#2196F3"
+    };
+
+    const weekCard = {
+        backgroundColor: "#f5f5f5",
+        padding: 15,
+        borderRadius: 10,
+        marginBottom: 15,
+        borderLeftWidth: 4,
+        flex: 1,
+        borderLeftColor: "#9C27B0"
+    };
+
+    const formatCurrency = (value: number) =>
+        new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+        }).format(value);
 
     return (
         <View style={{ flex: 1, padding: 20, backgroundColor: "#fff" }}>
@@ -107,6 +152,58 @@ export default function Home() {
                     </Text>
                 </View>
             )}
+
+            <View style={{ flexDirection: "row", gap: 10, marginBottom: 15 }}>
+                <View style={monthCard}>
+                    <Text style={{ fontSize: 14, fontWeight: "bold", marginBottom: 10 }}>
+                        📅 {getMonthName()}
+                    </Text>
+
+                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                        <Text style={{ fontSize: 12 }}>
+                            💰:
+                        </Text>
+
+                        <Text style={{ color: "#4CAF50", fontWeight: "bold", fontSize: 12, marginLeft: 5 }}>
+                            {formatCurrency(monthlyIncome)}
+                        </Text>
+                    </View>
+
+                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                        <Text style={{ fontSize: 12 }}>
+                            💸:
+                        </Text>
+
+                        <Text style={{ color: "#f44336", fontWeight: "bold", fontSize: 12, marginLeft: 5 }}>
+                            {formatCurrency(monthlyExpense)}
+                        </Text>
+                    </View>
+                </View>
+
+                <View style={weekCard}>
+                    <Text style={{ fontSize: 14, fontWeight: "bold", marginBottom: 10 }}>📆 Esta semana</Text>
+
+                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                        <Text style={{ fontSize: 12 }}>
+                            💰:
+                        </Text>
+
+                        <Text style={{ color: "#4CAF50", fontWeight: "bold", fontSize: 12, marginLeft: 5 }}>
+                            {formatCurrency(weeklyIncome)}
+                        </Text>
+                    </View>
+
+                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                        <Text style={{ fontSize: 12 }}>
+                            💸:
+                        </Text>
+
+                        <Text style={{ color: "#f44336", fontWeight: "bold", fontSize: 12, marginLeft: 5 }}>
+                            {formatCurrency(weeklyExpense)}
+                        </Text>
+                    </View>
+                </View>
+            </View>
 
             {/* CONDIÇÃO: Se ainda está carregando dados do AsyncStorage, mostra mensagem */}
             {isLoading ? (
