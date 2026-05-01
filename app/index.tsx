@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Alert, FlatList, Pressable, Text, View } from "react-native";
 import { ExpensesContext } from "../src/context/ExpensesContext";
 import { exportToExcel } from "../src/utils/exportToExcel";
@@ -62,6 +62,20 @@ export default function Home() {
             currency: "BRL",
         }).format(value);
 
+
+    const [filter, setFilter] = useState<"all" | "month" | "week">("all");
+
+    const filteredExpenses =
+        filter === "month"
+            ? monthlyExpenses
+            : filter === "week"
+                ? weeklyExpenses
+                : expenses;
+
+    const sortedExpenses = [...filteredExpenses].sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+
     return (
         <View style={{ flex: 1, padding: 20, backgroundColor: "#fff" }}>
 
@@ -72,7 +86,7 @@ export default function Home() {
 
                 {/* BOTÃO: Exportar para Excel */}
                 <Pressable
-                    onPress={() => exportToExcel(expenses)}
+                    onPress={() => exportToExcel(filteredExpenses, filter)}
                     style={{
                         backgroundColor: "#2196F3",
                         paddingHorizontal: 15,
@@ -205,10 +219,54 @@ export default function Home() {
                 </View>
             </View>
 
+            <View style={{ flexDirection: "row", gap: 10, marginBottom: 10 }}>
+                <Pressable
+                    onPress={() => setFilter("all")}
+                    style={({ pressed }) => ({
+                        padding: 10,
+                        backgroundColor: filter === "all" ? "#4CAF50" : "#ccc",
+                        alignItems: "center",
+                        borderRadius: 8,
+                        opacity: pressed ? 0.7 : 1, // 👈 efeito simples
+                        transform: [{ scale: pressed ? 0.95 : 1 }], // 👈 leve “afundar”
+                    })}
+                >
+                    <Text style={{ color: "#fff" }}>Todos</Text>
+                </Pressable>
+
+                <Pressable
+                    onPress={() => setFilter("month")}
+                    style={({ pressed }) => ({
+                        padding: 10,
+                        backgroundColor: filter === "month" ? "#4CAF50" : "#ccc",
+                        alignItems: "center",
+                        borderRadius: 8,
+                        opacity: pressed ? 0.7 : 1, // 👈 efeito simples
+                        transform: [{ scale: pressed ? 0.95 : 1 }], // 👈 leve “afundar”
+                    })}
+                >
+                    <Text style={{ color: "#fff" }}>Mês</Text>
+                </Pressable>
+
+                <Pressable
+                    onPress={() => setFilter("week")}
+                    style={({ pressed }) => ({
+                        padding: 10,
+                        backgroundColor: filter === "week" ? "#2196F3" : "#ccc",
+                        alignItems: "center",
+                        borderRadius: 8,
+                        opacity: pressed ? 0.7 : 1,
+                        transform: [{ scale: pressed ? 0.96 : 1 }],
+                    })}
+                >
+                    <Text style={{ color: "#fff" }}>Semana</Text>
+                </Pressable>
+            </View>
+
             {/* CONDIÇÃO: Se ainda está carregando dados do AsyncStorage, mostra mensagem */}
             {isLoading ? (
                 <Text>Carregando dados...</Text>
-            ) : expenses.length === 0 ? (
+            ) : sortedExpenses.length === 0 ? (
                 // Se não tem nenhum gasto, mostra mensagem vazia
                 <View style={{ marginTop: 20 }}>
                     <Text style={{ fontSize: 16, color: "#999" }}>
@@ -218,7 +276,7 @@ export default function Home() {
             ) : (
                 // Se tem gastos, exibe a lista com melhor formatação
                 <FlatList
-                    data={expenses}
+                    data={sortedExpenses}
                     keyExtractor={(item: Expense, index: number) => String(item.id || index)}
                     renderItem={({ item, index }: { item: Expense; index: number }) => {
                         // Formata a data para formato legível (DD/MM/YYYY)

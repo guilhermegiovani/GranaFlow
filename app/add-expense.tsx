@@ -26,7 +26,7 @@ export default function AddExpense() {
         <View style={{ flex: 1, padding: 20 }}>
 
             <Text style={{ fontSize: 24, fontWeight: "bold" }}>
-                Adicionar Gasto
+                Adicionar Gasto / Ganho
             </Text>
 
             <TextInput
