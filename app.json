@@ -15,8 +15,6 @@
       "adaptiveIcon": {
         "backgroundColor": "#1B5E20",
         "foregroundImage": "./assets/images/icon-fg.png"
-        // "backgroundImage": "./assets/images/icon-granaflow.png"
-        // "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
@@ -44,6 +42,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "13d654d4-f33c-4141-a6f8-42cbd2cee345"
+      }
     }
   }
 }
