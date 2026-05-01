@@ -124,7 +124,6 @@ export const exportToExcel = async (expenses: Expense[], filter: "all" | "month"
     // Esse caminho tem permissão garantida no Expo Go
     //const fileUri = `${documentDirectory}${fileName}`;
     const fileUri = `${FileSystem.documentDirectory}${fileName}`;
-    console.log("URI:", fileUri);
 
     await FileSystem.writeAsStringAsync(fileUri, wbout, {
       encoding: "base64",

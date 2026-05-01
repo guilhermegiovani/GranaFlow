@@ -224,7 +224,7 @@ export default function Home() {
                     onPress={() => setFilter("all")}
                     style={({ pressed }) => ({
                         padding: 10,
-                        backgroundColor: filter === "all" ? "#4CAF50" : "#ccc",
+                        backgroundColor: filter === "all" ? "#2196F3" : "#ccc",
                         alignItems: "center",
                         borderRadius: 8,
                         opacity: pressed ? 0.7 : 1, // 👈 efeito simples
@@ -238,7 +238,7 @@ export default function Home() {
                     onPress={() => setFilter("month")}
                     style={({ pressed }) => ({
                         padding: 10,
-                        backgroundColor: filter === "month" ? "#4CAF50" : "#ccc",
+                        backgroundColor: filter === "month" ? "#2196F3" : "#ccc",
                         alignItems: "center",
                         borderRadius: 8,
                         opacity: pressed ? 0.7 : 1, // 👈 efeito simples
