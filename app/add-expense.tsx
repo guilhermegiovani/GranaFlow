@@ -33,7 +33,7 @@ export default function AddExpense() {
 
             <TextInput
                 placeholder="Descrição"
-                placeholderTextColor={"#303030"}
+                placeholderTextColor={"#414141"}
                 value={description}
                 onChangeText={setDescription}
                 style={{
@@ -48,7 +48,7 @@ export default function AddExpense() {
 
             <TextInput
                 placeholder="Valor"
-                placeholderTextColor={"#303030"}
+                placeholderTextColor={"#414141"}
                 value={value}
                 onChangeText={setValue}
                 keyboardType="numeric"
@@ -64,7 +64,7 @@ export default function AddExpense() {
 
             <TextInput
                 placeholder="Categoria (ex: combustível)"
-                placeholderTextColor={"#303030"}
+                placeholderTextColor={"#414141"}
                 value={category}
                 onChangeText={setCategory}
                 style={{
