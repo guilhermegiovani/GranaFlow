@@ -4,7 +4,17 @@ import { ExpensesProvider } from "../src/context/ExpensesContext";
 export default function Layout() {
   return (
     <ExpensesProvider>
-      <Stack />
+      <Stack>
+        <Stack.Screen
+          name="index"
+          options={{ title: 'Home' }}
+        />
+
+        <Stack.Screen
+          name="add-expense"
+          options={{ title: 'Novo Gasto' }}
+        />
+      </Stack>
     </ExpensesProvider>
   );
 }

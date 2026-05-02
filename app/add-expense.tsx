@@ -4,6 +4,7 @@ import { ExpensesContext } from "../src/context/ExpensesContext";
 import { useRouter } from "expo-router";
 // Importa o tipo Expense que criamos
 import { Expense, ExpensesContextType } from "../src/types/index";
+import { StatusBar } from 'expo-status-bar';
 
 export default function AddExpense() {
     // Pega a função addExpense do Context (que agora salva no AsyncStorage)
@@ -24,6 +25,7 @@ export default function AddExpense() {
 
     return (
         <View style={{ flex: 1, padding: 20 }}>
+            <StatusBar style="dark" />
 
             <Text style={{ fontSize: 24, fontWeight: "bold" }}>
                 Adicionar Gasto / Ganho
@@ -31,6 +33,7 @@ export default function AddExpense() {
 
             <TextInput
                 placeholder="Descrição"
+                placeholderTextColor={"#303030"}
                 value={description}
                 onChangeText={setDescription}
                 style={{
@@ -39,11 +42,13 @@ export default function AddExpense() {
                     padding: 10,
                     marginTop: 20,
                     borderRadius: 8,
+                    color: "#000"
                 }}
             />
 
             <TextInput
                 placeholder="Valor"
+                placeholderTextColor={"#303030"}
                 value={value}
                 onChangeText={setValue}
                 keyboardType="numeric"
@@ -53,11 +58,13 @@ export default function AddExpense() {
                     padding: 10,
                     marginTop: 10,
                     borderRadius: 8,
+                    color: "#000"
                 }}
             />
 
             <TextInput
                 placeholder="Categoria (ex: combustível)"
+                placeholderTextColor={"#303030"}
                 value={category}
                 onChangeText={setCategory}
                 style={{
@@ -66,6 +73,7 @@ export default function AddExpense() {
                     padding: 10,
                     marginTop: 10,
                     borderRadius: 8,
+                    color: "#000"
                 }}
             />
 

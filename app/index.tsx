@@ -6,6 +6,9 @@ import { exportToExcel } from "../src/utils/exportToExcel";
 // Importa os tipos que criamos
 import { Expense, ExpensesContextType } from "../src/types/index";
 import { getMonthlyExpenses, getWeeklyExpenses, sumByType } from "../src/utils/dateFilters";
+import { StatusBar } from 'expo-status-bar';
+
+
 
 export default function Home() {
     // Pega o router para navegar entre telas
@@ -78,6 +81,7 @@ export default function Home() {
 
     return (
         <View style={{ flex: 1, padding: 20, backgroundColor: "#fff" }}>
+            <StatusBar style="dark" />
 
             <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                 <Text style={{ fontSize: 24, fontWeight: "bold" }}>
