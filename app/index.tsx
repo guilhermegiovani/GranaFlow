@@ -7,6 +7,8 @@ import { exportToExcel } from "../src/utils/exportToExcel";
 import { Expense, ExpensesContextType } from "../src/types/index";
 import { getMonthlyExpenses, getWeeklyExpenses, sumByType } from "../src/utils/dateFilters";
 import { StatusBar } from 'expo-status-bar';
+import ExpensesPieChart from "@/components/Chart/ExpensesPieChart";
+import { ScrollView } from "react-native"
 
 
 
@@ -280,6 +282,12 @@ export default function Home() {
             ) : (
                 // Se tem gastos, exibe a lista com melhor formatação
                 <FlatList
+                    ListHeaderComponent={
+                        <ExpensesPieChart expenses={filteredExpenses} />
+                    }
+                    contentContainerStyle={{
+                        paddingBottom: 75, // para dar espaço pro botão flutuante
+                    }}
                     data={sortedExpenses}
                     keyExtractor={(item: Expense, index: number) => String(item.id || index)}
                     renderItem={({ item, index }: { item: Expense; index: number }) => {
