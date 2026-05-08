@@ -1,11 +1,13 @@
 import { Expense } from "@/src/types";
+import { getWeeklyExpenses } from "@/src/utils/dateFilters";
 
 
 export function groupByCategory(expenses: Expense[]) {
     //const result = [] as { category: string; total: number }[];
+    const justExpenses = expenses.filter(e => e.type === "expense")
     const result = {} as { [category: string]: number };
 
-    expenses.forEach((expense) => {
+    justExpenses.forEach((expense) => {
         const category = expense.category;
         //const total = expense.value;
         //const existing = result.find(e => e.category === category)
@@ -23,24 +25,29 @@ export function groupByCategory(expenses: Expense[]) {
     }))
 }
 
-// export function groupByDays(expenses: Expense[]) {
-//     //const result = [] as { category: string; total: number }[];
-//     const result = {} as { [category: string]: number };
+export function groupByDays(expenses: Expense[]) {
+    const justExpenses = expenses.filter(e => e.type === "expense")
 
-//     expenses.forEach((expense) => {
-//         const category = expense.category;
-//         //const total = expense.value;
-//         //const existing = result.find(e => e.category === category)
+    const result = {
+        Dom: 0,
+        Seg: 0,
+        Ter: 0,
+        Qua: 0,
+        Qui: 0,
+        Sex: 0,
+        Sab: 0
+    } as { [day: string]: number };
+    const days = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"]
 
-//         if (!result[category]) {
-//             result[category] = 0
-//         }
+    justExpenses.forEach((expense) => {
+        const date = new Date(expense.date);
+        const day = days[date.getDay()]
 
-//         result[category] += expense.value
-//     });
+        result[day] += expense.value
+    });
 
-//     return Object.entries(result).map(([category, total]) => ({
-//         category,
-//         total
-//     }))
-// }
+    return Object.entries(result).map(([day, total]) => ({
+        day,
+        total
+    }))
+}

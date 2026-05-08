@@ -1,4 +1,4 @@
-import { Dimensions, Animated } from "react-native"
+import { Dimensions, Animated, Text } from "react-native"
 import { PieChart } from "react-native-chart-kit"
 import { Expense } from "@/src/types";
 import { groupByCategory } from "./groupExpenses";
@@ -51,21 +51,31 @@ export default function ExpensesPieChart({ expenses }: { expenses: Expense[] }) 
     return (
         <Animated.View
             style={{
+                marginBottom: 16,
                 opacity: fadeAnim,
                 transform: [
                     {
                         translateY: translateYAnim
                     }
-                ]
+                ],
+                backgroundColor: "#f2f2f2",
+                padding: 16,
+                borderRadius: 16,
+                elevation: 2,
+                overflow: "hidden"
             }}
         >
+            <Text
+                style={{ textAlign: "center", fontSize: 16, marginBottom: 8 }}
+            >Gastos por categoria</Text>
+
             <PieChart
                 data={data}
-                width={screenWidth}
+                width={screenWidth - 32}
                 height={220}
                 chartConfig={{
-                    backgroundGradientFrom: "#fff",
-                    backgroundGradientTo: "#fff",
+                    backgroundGradientFrom: "#f2f2f2",
+                    backgroundGradientTo: "#f2f2f2",
                     color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
                     labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
                 }}
