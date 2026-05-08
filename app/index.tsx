@@ -5,10 +5,12 @@ import { ExpensesContext } from "../src/context/ExpensesContext";
 import { exportToExcel } from "../src/utils/exportToExcel";
 // Importa os tipos que criamos
 import { Expense, ExpensesContextType } from "../src/types/index";
+
 import { getMonthlyExpenses, getWeeklyExpenses, sumByType } from "../src/utils/dateFilters";
 import { StatusBar } from 'expo-status-bar';
 import ExpensesPieChart from "@/components/Chart/ExpensesPieChart";
 import { ScrollView } from "react-native"
+import ExpensesChart from "@/components/Chart/ExpensesChart";
 
 
 
@@ -283,7 +285,7 @@ export default function Home() {
                 // Se tem gastos, exibe a lista com melhor formatação
                 <FlatList
                     ListHeaderComponent={
-                        <ExpensesPieChart expenses={filteredExpenses} />
+                        <ExpensesChart expenses={filteredExpenses} filter={filter} />
                     }
                     contentContainerStyle={{
                         paddingBottom: 75, // para dar espaço pro botão flutuante
