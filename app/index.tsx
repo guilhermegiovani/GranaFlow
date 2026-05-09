@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { useContext, useState } from "react";
-import { Alert, FlatList, Pressable, Text, View } from "react-native";
+import { Alert, FlatList, Pressable, Text, View, RefreshControl } from "react-native";
 import { ExpensesContext } from "../src/context/ExpensesContext";
 import { exportToExcel } from "../src/utils/exportToExcel";
 // Importa os tipos que criamos
@@ -11,6 +11,9 @@ import { StatusBar } from 'expo-status-bar';
 import ExpensesPieChart from "@/components/Chart/ExpensesPieChart";
 import { ScrollView } from "react-native"
 import ExpensesChart from "@/components/Chart/ExpensesChart";
+import ExpenseList from "@/components/ExpenseList";
+import ExpenseFilter from "@/components/ExpenseFilter";
+import PeriodCard from "@/components/PeriodCard";
 
 
 
@@ -21,7 +24,7 @@ export default function Home() {
     // Pega os dados do Context (agora com persistência via AsyncStorage)
     // ExpensesContextType = tipagem (valida que context tem essas funções)
     // ! = "force" (garante que não é undefined)
-    const { expenses, deleteExpense, isLoading } = useContext(
+    const { expenses, isLoading } = useContext(
         ExpensesContext
     ) as ExpensesContextType;
 
@@ -63,11 +66,11 @@ export default function Home() {
         borderLeftColor: "#9C27B0"
     };
 
-    const formatCurrency = (value: number) =>
-        new Intl.NumberFormat("pt-BR", {
-            style: "currency",
-            currency: "BRL",
-        }).format(value);
+    // const formatCurrency = (value: number) =>
+    //     new Intl.NumberFormat("pt-BR", {
+    //         style: "currency",
+    //         currency: "BRL",
+    //     }).format(value);
 
 
     const [filter, setFilter] = useState<"all" | "month" | "week">("all");
@@ -82,6 +85,18 @@ export default function Home() {
     const sortedExpenses = [...filteredExpenses].sort(
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
+
+    const [refreshing, setRefreshing] = useState(false)
+
+    // const onRefresh = async () => {
+    //     setRefreshing(true)
+
+    //     // recarregar dados aqui
+
+    //     setTimeout(() => {
+    //         setRefreshing(false)
+    //     }, 500)
+    // }
 
     return (
         <View style={{ flex: 1, padding: 20, backgroundColor: "#fff" }}>
@@ -176,100 +191,23 @@ export default function Home() {
             )}
 
             <View style={{ flexDirection: "row", gap: 10, marginBottom: 15 }}>
-                <View style={monthCard}>
-                    <Text style={{ fontSize: 14, fontWeight: "bold", marginBottom: 10 }}>
-                        📅 {getMonthName()}
-                    </Text>
+                <PeriodCard
+                    income={monthlyIncome}
+                    expense={monthlyExpense}
+                    title={getMonthName()}
+                    cardStyle={monthCard}
+                />
 
-                    <View style={{ flexDirection: "row", alignItems: "center" }}>
-                        <Text style={{ fontSize: 12 }}>
-                            💰:
-                        </Text>
-
-                        <Text style={{ color: "#4CAF50", fontWeight: "bold", fontSize: 12, marginLeft: 5 }}>
-                            {formatCurrency(monthlyIncome)}
-                        </Text>
-                    </View>
-
-                    <View style={{ flexDirection: "row", alignItems: "center" }}>
-                        <Text style={{ fontSize: 12 }}>
-                            💸:
-                        </Text>
-
-                        <Text style={{ color: "#f44336", fontWeight: "bold", fontSize: 12, marginLeft: 5 }}>
-                            {formatCurrency(monthlyExpense)}
-                        </Text>
-                    </View>
-                </View>
-
-                <View style={weekCard}>
-                    <Text style={{ fontSize: 14, fontWeight: "bold", marginBottom: 10 }}>📆 Esta semana</Text>
-
-                    <View style={{ flexDirection: "row", alignItems: "center" }}>
-                        <Text style={{ fontSize: 12 }}>
-                            💰:
-                        </Text>
-
-                        <Text style={{ color: "#4CAF50", fontWeight: "bold", fontSize: 12, marginLeft: 5 }}>
-                            {formatCurrency(weeklyIncome)}
-                        </Text>
-                    </View>
-
-                    <View style={{ flexDirection: "row", alignItems: "center" }}>
-                        <Text style={{ fontSize: 12 }}>
-                            💸:
-                        </Text>
-
-                        <Text style={{ color: "#f44336", fontWeight: "bold", fontSize: 12, marginLeft: 5 }}>
-                            {formatCurrency(weeklyExpense)}
-                        </Text>
-                    </View>
-                </View>
+                <PeriodCard
+                    income={weeklyIncome}
+                    expense={weeklyExpense}
+                    title=" Esta semana"
+                    cardStyle={weekCard}
+                />
             </View>
 
-            <View style={{ flexDirection: "row", gap: 10, marginBottom: 10 }}>
-                <Pressable
-                    onPress={() => setFilter("all")}
-                    style={({ pressed }) => ({
-                        padding: 10,
-                        backgroundColor: filter === "all" ? "#2196F3" : "#ccc",
-                        alignItems: "center",
-                        borderRadius: 8,
-                        opacity: pressed ? 0.7 : 1, // 👈 efeito simples
-                        transform: [{ scale: pressed ? 0.95 : 1 }], // 👈 leve “afundar”
-                    })}
-                >
-                    <Text style={{ color: "#fff" }}>Todos</Text>
-                </Pressable>
-
-                <Pressable
-                    onPress={() => setFilter("month")}
-                    style={({ pressed }) => ({
-                        padding: 10,
-                        backgroundColor: filter === "month" ? "#2196F3" : "#ccc",
-                        alignItems: "center",
-                        borderRadius: 8,
-                        opacity: pressed ? 0.7 : 1, // 👈 efeito simples
-                        transform: [{ scale: pressed ? 0.95 : 1 }], // 👈 leve “afundar”
-                    })}
-                >
-                    <Text style={{ color: "#fff" }}>Mês</Text>
-                </Pressable>
-
-                <Pressable
-                    onPress={() => setFilter("week")}
-                    style={({ pressed }) => ({
-                        padding: 10,
-                        backgroundColor: filter === "week" ? "#2196F3" : "#ccc",
-                        alignItems: "center",
-                        borderRadius: 8,
-                        opacity: pressed ? 0.7 : 1,
-                        transform: [{ scale: pressed ? 0.96 : 1 }],
-                    })}
-                >
-                    <Text style={{ color: "#fff" }}>Semana</Text>
-                </Pressable>
-            </View>
+            {/* Filtro de despesas */}
+            <ExpenseFilter filter={filter} setFilter={setFilter} />
 
             {/* CONDIÇÃO: Se ainda está carregando dados do AsyncStorage, mostra mensagem */}
             {isLoading ? (
@@ -283,86 +221,7 @@ export default function Home() {
                 </View>
             ) : (
                 // Se tem gastos, exibe a lista com melhor formatação
-                <FlatList
-                    ListHeaderComponent={
-                        <ExpensesChart expenses={filteredExpenses} filter={filter} />
-                    }
-                    contentContainerStyle={{
-                        paddingBottom: 75, // para dar espaço pro botão flutuante
-                    }}
-                    data={sortedExpenses}
-                    keyExtractor={(item: Expense, index: number) => String(item.id || index)}
-                    renderItem={({ item, index }: { item: Expense; index: number }) => {
-                        // Formata a data para formato legível (DD/MM/YYYY)
-                        const date = new Date(item.date).toLocaleDateString("pt-BR");
-
-                        return (
-                            <View
-                                style={{
-                                    backgroundColor: item.type === "expense" ? "#ffebee" : "#e8f5e9",
-                                    padding: 12,
-                                    marginBottom: 10,
-                                    borderRadius: 8,
-                                    borderLeftWidth: 4,
-                                    borderLeftColor: item.type === "expense" ? "#f44336" : "#4CAF50",
-                                    flexDirection: "row",
-                                    justifyContent: "space-between",
-                                    alignItems: "center",
-                                }}
-                            >
-                                <View style={{ flex: 1 }}>
-                                    <Text style={{ fontWeight: "bold", fontSize: 14 }}>
-                                        {item.description}
-                                    </Text>
-                                    <Text style={{ fontSize: 12, color: "#666", marginTop: 4 }}>
-                                        {item.category} • {date}
-                                    </Text>
-                                </View>
-
-                                <View style={{ alignItems: "flex-end", marginRight: 10 }}>
-                                    <Text
-                                        style={{
-                                            fontSize: 16,
-                                            fontWeight: "bold",
-                                            color: item.type === "expense" ? "#f44336" : "#4CAF50",
-                                        }}
-                                    >
-                                        {item.type === "expense" ? "-" : "+"}{item.value.toLocaleString("pt-BR", {
-                                            style: "currency",
-                                            currency: "BRL",
-                                        })}
-                                    </Text>
-                                </View>
-
-                                {/* BOTÃO: Deletar gasto */}
-                                <Pressable
-                                    onPress={() => {
-                                        Alert.alert(
-                                            "Deletar?",
-                                            "Tem certeza que quer deletar este gasto?",
-                                            [
-                                                { text: "Cancelar", style: "cancel" },
-                                                {
-                                                    text: "Deletar",
-                                                    onPress: () => deleteExpense(index),
-                                                    style: "destructive",
-                                                },
-                                            ]
-                                        );
-                                    }}
-                                    style={{
-                                        padding: 8,
-                                        backgroundColor: "#ffcdd2",
-                                        borderRadius: 6,
-                                    }}
-                                >
-                                    <Text style={{ color: "#c62828", fontWeight: "bold" }}>X</Text>
-                                </Pressable>
-                            </View>
-                        );
-                    }}
-                    scrollEnabled={true}
-                />
+                <ExpenseList expenses={sortedExpenses} filter={filter} />
             )}
 
             {/* BOTÃO FLUTUANTE: + para adicionar novo gasto */}
@@ -382,7 +241,7 @@ export default function Home() {
                     shadowColor: "#000", // Sombra no iOS
                     shadowOffset: { width: 0, height: 2 },
                     shadowOpacity: 0.25,
-                    shadowRadius: 3,
+                    shadowRadius: 3
                 }}
             >
                 <Text style={{ color: "#fff", fontSize: 25, fontWeight: "bold" }}>+</Text>

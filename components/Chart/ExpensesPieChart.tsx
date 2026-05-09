@@ -1,7 +1,7 @@
 import { Dimensions, Animated, Text } from "react-native"
 import { PieChart } from "react-native-chart-kit"
 import { Expense } from "@/src/types";
-import { groupByCategory } from "./groupExpenses";
+import { groupByCategory } from "../../src/utils/groupExpenses";
 import { useEffect, useRef } from "react";
 
 export default function ExpensesPieChart({ expenses }: { expenses: Expense[] }) {

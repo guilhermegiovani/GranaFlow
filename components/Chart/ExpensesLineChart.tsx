@@ -1,6 +1,6 @@
 import { Expense } from "@/src/types";
 import { getWeeklyExpenses } from "@/src/utils/dateFilters";
-import { groupByDays } from "./groupExpenses";
+import { groupByDays } from "../../src/utils/groupExpenses";
 import { LineChart } from "react-native-chart-kit";
 import { Dimensions, View, Text, Animated } from "react-native";
 import { useEffect, useRef } from "react";
