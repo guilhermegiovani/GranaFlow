@@ -2,63 +2,48 @@ import { Expense } from "@/src/types";
 import { Pressable, Text, View } from "react-native";
 import MonthSelector from "./MonthSelector";
 import { useState } from "react";
+import FilterButton from "./FilterButton";
 
 
-export default function ExpenseFilter({ expenses, filter, setFilter }: { expenses: Expense[]; filter: "all" | "month" | "week"; setFilter: (value: "all" | "month" | "week") => void }) {
+export default function ExpenseFilter({ expenses, filter, setFilter, selectedMonth, setSelectedMonth }: { expenses: Expense[]; filter: "all" | "month" | "week" | "history"; setFilter: (value: "all" | "month" | "week" | "history") => void; selectedMonth: string; setSelectedMonth: (month: string) => void }) {
 
-    const [selectedMonth, setSelectedMonth] = useState<string>("");
+    // const currentMonth = new Date().toLocaleDateString("pt-BR", {
+    //     month: "long"
+    // })
+
+    //const [selectedMonth, setSelectedMonth] = useState<string>("");
 
     return (
         <View style={{ flexDirection: "row", gap: 10, marginBottom: 10 }}>
-            <Pressable
+
+            <FilterButton
+                title="Todos"
+                isActive={filter === "all"}
                 onPress={() => {
                     setFilter("all")
                     setSelectedMonth("") // Limpa seleção de mês ao escolher todos
                 }}
-                style={({ pressed }) => ({
-                    padding: 10,
-                    backgroundColor: filter === "all" ? "#2196F3" : "#ccc",
-                    alignItems: "center",
-                    borderRadius: 8,
-                    opacity: pressed ? 0.7 : 1, // 👈 efeito simples
-                    transform: [{ scale: pressed ? 0.95 : 1 }], // 👈 leve “afundar”
-                })}
-            >
-                <Text style={{ color: "#fff" }}>Todos</Text>
-            </Pressable>
+            />
 
-            {/* <Pressable
-                onPress={() => setFilter("month")}
-                style={({ pressed }) => ({
-                    padding: 10,
-                    backgroundColor: filter === "month" ? "#2196F3" : "#ccc",
-                    alignItems: "center",
-                    borderRadius: 8,
-                    opacity: pressed ? 0.7 : 1, // 👈 efeito simples
-                    transform: [{ scale: pressed ? 0.95 : 1 }], // 👈 leve “afundar”
-                })}
-            >
-                <Text style={{ color: "#fff" }}>Mês atual</Text>
-            </Pressable> */}
+            <FilterButton
+                title="Mês"
+                isActive={filter === "month"}
+                onPress={() => {
+                    setFilter("month")
+                    setSelectedMonth("") // Limpa seleção de mês ao escolher mês atual
+                }}
+            />
 
-            <MonthSelector expenses={expenses} filter={filter} setFilter={setFilter} selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} />
-
-            <Pressable
+            <FilterButton
+                title="Semana"
+                isActive={filter === "week"}
                 onPress={() => {
                     setFilter("week")
                     setSelectedMonth("") // Limpa seleção de mês ao escolher semana
                 }}
-                style={({ pressed }) => ({
-                    padding: 10,
-                    backgroundColor: filter === "week" ? "#2196F3" : "#ccc",
-                    alignItems: "center",
-                    borderRadius: 8,
-                    opacity: pressed ? 0.7 : 1,
-                    transform: [{ scale: pressed ? 0.96 : 1 }],
-                })}
-            >
-                <Text style={{ color: "#fff" }}>Semana</Text>
-            </Pressable>
+            />
+
+            <MonthSelector expenses={expenses} filter={filter} setFilter={setFilter} selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} />
         </View>
     )
 }

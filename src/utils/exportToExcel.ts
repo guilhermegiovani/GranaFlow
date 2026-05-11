@@ -10,7 +10,7 @@ import { Expense } from "../types/index";
 // Função para exportar gastos em Excel
 // expenses: Expense[] = recebe um array tipado de Expense (TypeScript valida!)
 // Promise<void> = é assíncrona e não retorna nada
-export const exportToExcel = async (expenses: Expense[], filter: "all" | "month" | "week"): Promise<void> => {
+export const exportToExcel = async (expenses: Expense[], filter: "all" | "month" | "week" | "history"): Promise<void> => {
   try {
     // VALIDAÇÃO: Verifica se tem gastos para exportar
     if (expenses.length === 0) {

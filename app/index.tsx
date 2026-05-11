@@ -68,7 +68,7 @@ export default function Home() {
         borderLeftColor: "#9C27B0"
     };
 
-    const [filter, setFilter] = useState<"all" | "month" | "week">("all");
+    const [filter, setFilter] = useState<"all" | "month" | "week" | "history">("all");
 
     const filteredExpenses =
         filter === "month"
@@ -136,7 +136,13 @@ export default function Home() {
             {/* <MonthSelector expenses={expenses} selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} /> */}
 
             {/* Filtro de despesas */}
-            <ExpenseFilter expenses={expenses} filter={filter} setFilter={setFilter} />
+            <ExpenseFilter
+                expenses={expenses}
+                filter={filter}
+                setFilter={setFilter}
+                selectedMonth={selectedMonth}
+                setSelectedMonth={setSelectedMonth}
+            />
 
             {/* CONDIÇÃO: Se ainda está carregando dados do AsyncStorage, mostra mensagem */}
             {isLoading ? (

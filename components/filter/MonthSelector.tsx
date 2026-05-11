@@ -4,8 +4,8 @@ import { ViewStyle, View, Text, TouchableOpacity, Modal, FlatList, Pressable } f
 import getUniqueMonths from "@/src/utils/getUniqueMonths";
 
 export default function MonthSelector(
-    { expenses, filter, setFilter, selectedMonth, setSelectedMonth }: 
-    { expenses: any[]; filter: "all" | "month" | "week"; setFilter: (value: "all" | "month" | "week") => void; selectedMonth: string; setSelectedMonth: (month: string) => void }
+    { expenses, filter, setFilter, selectedMonth, setSelectedMonth }:
+        { expenses: any[]; filter: "all" | "month" | "week" | "history"; setFilter: (value: "all" | "month" | "week" | "history") => void; selectedMonth: string; setSelectedMonth: (month: string) => void }
 ) {
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -14,6 +14,7 @@ export default function MonthSelector(
     const handleSelectMonth = (month: string) => {
         setSelectedMonth(month);
         setModalVisible(false);
+        setFilter("history");
     };
 
     const overlay: ViewStyle = {
@@ -35,18 +36,24 @@ export default function MonthSelector(
             <Pressable
                 onPress={() => {
                     setModalVisible(true)
-                    setFilter("month")
                 }}
                 style={({ pressed }) => ({
                     padding: 10,
-                    backgroundColor: filter === "month" ? "#2196F3" : "#ccc",
+                    backgroundColor: filter === "history" ? "#2196F3" : "#ccc",
                     alignItems: "center",
                     borderRadius: 8,
                     opacity: pressed ? 0.7 : 1,
                     transform: [{ scale: pressed ? 0.96 : 1 }],
                 })}
             >
-                <Text style={{ color: "#fff" }}>{selectedMonth || "Selecione o mês"}</Text>
+                <Text
+                    style={{
+                        color: filter === "history" ? "#fff" : "#3d3d3d",
+                        fontWeight: "bold"
+                    }}
+                >
+                    {selectedMonth || "Histórico"}
+                </Text>
             </Pressable>
 
             <Modal
