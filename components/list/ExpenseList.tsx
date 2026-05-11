@@ -1,6 +1,6 @@
 import { Expense, ExpensesContextType } from "@/src/types";
 import { Alert, FlatList, Pressable, RefreshControl, View, Text } from "react-native";
-import ExpensesChart from "./Chart/ExpensesChart";
+import ExpensesChart from "../Chart/ExpensesChart";
 import { useContext, useState } from "react";
 import { ExpensesContext } from "@/src/context/ExpensesContext";
 

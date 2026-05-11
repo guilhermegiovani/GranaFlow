@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { useContext, useState } from "react";
-import { Alert, FlatList, Pressable, Text, View, RefreshControl } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { ExpensesContext } from "../src/context/ExpensesContext";
 import { exportToExcel } from "../src/utils/exportToExcel";
 // Importa os tipos que criamos
@@ -8,12 +8,14 @@ import { Expense, ExpensesContextType } from "../src/types/index";
 
 import { getMonthlyExpenses, getWeeklyExpenses, sumByType } from "../src/utils/dateFilters";
 import { StatusBar } from 'expo-status-bar';
-import ExpensesPieChart from "@/components/Chart/ExpensesPieChart";
-import { ScrollView } from "react-native"
-import ExpensesChart from "@/components/Chart/ExpensesChart";
-import ExpenseList from "@/components/ExpenseList";
-import ExpenseFilter from "@/components/ExpenseFilter";
-import PeriodCard from "@/components/PeriodCard";
+// import ExpensesPieChart from "@/components/Chart/ExpensesPieChart";
+// import ExpensesChart from "@/components/Chart/ExpensesChart";
+import ExpenseList from "@/components/list/ExpenseList";
+import ExpenseFilter from "@/components/filter/ExpenseFilter";
+import PeriodCard from "@/components/cards/PeriodCard";
+import SummaryCard from "@/components/cards/SummaryCard";
+import getUniqueMonths from "@/src/utils/getUniqueMonths";
+import MonthSelector from "@/components/filter/MonthSelector";
 
 
 
@@ -66,13 +68,6 @@ export default function Home() {
         borderLeftColor: "#9C27B0"
     };
 
-    // const formatCurrency = (value: number) =>
-    //     new Intl.NumberFormat("pt-BR", {
-    //         style: "currency",
-    //         currency: "BRL",
-    //     }).format(value);
-
-
     const [filter, setFilter] = useState<"all" | "month" | "week">("all");
 
     const filteredExpenses =
@@ -86,17 +81,9 @@ export default function Home() {
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 
-    const [refreshing, setRefreshing] = useState(false)
+    const [selectedMonth, setSelectedMonth] = useState<string>("");
 
-    // const onRefresh = async () => {
-    //     setRefreshing(true)
-
-    //     // recarregar dados aqui
-
-    //     setTimeout(() => {
-    //         setRefreshing(false)
-    //     }, 500)
-    // }
+    //console.log(getUniqueMonths(expenses));
 
     return (
         <View style={{ flex: 1, padding: 20, backgroundColor: "#fff" }}>
@@ -127,67 +114,7 @@ export default function Home() {
 
             {/* RESUMO: Mostra totais de ganhos, gastos e lucro */}
             {expenses.length > 0 && (
-                <View
-                    style={{
-                        backgroundColor: "#f5f5f5",
-                        padding: 15,
-                        borderRadius: 8,
-                        marginBottom: 15,
-                        borderLeftWidth: 4,
-                        borderLeftColor: "#2196F3",
-                    }}
-                >
-                    {/* Calcula total de ganhos */}
-                    <Text style={{ fontSize: 12, color: "#666", marginBottom: 5 }}>
-                        💰 Total Ganhos: <Text style={{ fontWeight: "bold", color: "#4CAF50" }}>
-                            {expenses
-                                .filter((e: any) => e.type === "income")
-                                .reduce((sum: number, e: any) => sum + e.value, 0)
-                                .toLocaleString("pt-BR", {
-                                    style: "currency",
-                                    currency: "BRL",
-                                })}
-                        </Text>
-                    </Text>
-
-                    {/* Calcula total de gastos */}
-                    <Text style={{ fontSize: 12, color: "#666", marginBottom: 5 }}>
-                        💸 Total Gastos: <Text style={{ fontWeight: "bold", color: "#f44336" }}>
-                            {expenses
-                                .filter((e: any) => e.type === "expense")
-                                .reduce((sum: number, e: any) => sum + e.value, 0)
-                                .toLocaleString("pt-BR", {
-                                    style: "currency",
-                                    currency: "BRL",
-                                })}
-                        </Text>
-                    </Text>
-
-                    {/* Calcula lucro líquido (ganhos - gastos) */}
-                    <Text style={{ fontSize: 14, color: "#000", fontWeight: "bold" }}>
-                        📈 Lucro Líquido: <Text style={{
-                            color: expenses
-                                .filter((e: any) => e.type === "income")
-                                .reduce((sum: number, e: any) => sum + e.value, 0) -
-                                expenses
-                                    .filter((e: any) => e.type === "expense")
-                                    .reduce((sum: number, e: any) => sum + e.value, 0) >= 0
-                                ? "#4CAF50"
-                                : "#f44336",
-                        }}>
-                            {(expenses
-                                .filter((e: any) => e.type === "income")
-                                .reduce((sum: number, e: any) => sum + e.value, 0) -
-                                expenses
-                                    .filter((e: any) => e.type === "expense")
-                                    .reduce((sum: number, e: any) => sum + e.value, 0))
-                                .toLocaleString("pt-BR", {
-                                    style: "currency",
-                                    currency: "BRL",
-                                })}
-                        </Text>
-                    </Text>
-                </View>
+                <SummaryCard expenses={expenses} />
             )}
 
             <View style={{ flexDirection: "row", gap: 10, marginBottom: 15 }}>
@@ -206,8 +133,10 @@ export default function Home() {
                 />
             </View>
 
+            {/* <MonthSelector expenses={expenses} selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} /> */}
+
             {/* Filtro de despesas */}
-            <ExpenseFilter filter={filter} setFilter={setFilter} />
+            <ExpenseFilter expenses={expenses} filter={filter} setFilter={setFilter} />
 
             {/* CONDIÇÃO: Se ainda está carregando dados do AsyncStorage, mostra mensagem */}
             {isLoading ? (
