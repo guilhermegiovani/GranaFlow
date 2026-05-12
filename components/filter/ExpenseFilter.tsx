@@ -43,7 +43,7 @@ export default function ExpenseFilter({ expenses, filter, setFilter, selectedMon
                 }}
             />
 
-            <MonthSelector expenses={expenses} filter={filter} setFilter={setFilter} selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} />
+            {/* <MonthSelector expenses={expenses} filter={filter} setFilter={setFilter} selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} /> */}
         </View>
     )
 }

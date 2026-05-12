@@ -35,8 +35,8 @@ export default function ExpenseList({ expenses, filter }: { expenses: Expense[];
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
             data={expenses}
-            keyExtractor={(item: Expense, index: number) => String(item.id || index)}
-            renderItem={({ item, index }: { item: Expense; index: number }) => {
+            keyExtractor={(item: Expense) => String(item.id)}
+            renderItem={({ item }: { item: Expense }) => {
                 // Formata a data para formato legível (DD/MM/YYYY)
                 const date = new Date(item.date).toLocaleDateString("pt-BR");
 
@@ -88,7 +88,9 @@ export default function ExpenseList({ expenses, filter }: { expenses: Expense[];
                                         { text: "Cancelar", style: "cancel" },
                                         {
                                             text: "Deletar",
-                                            onPress: () => deleteExpense(index),
+                                            onPress: () => {
+                                                deleteExpense(item.id)
+                                            },
                                             style: "destructive",
                                         },
                                     ]

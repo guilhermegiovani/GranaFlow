@@ -90,11 +90,11 @@ export function ExpensesProvider({ children }: ExpensesProviderProps) {
 
   // Função para DELETAR um gasto por índice
   // index: number = recebe a posição no array (ex: 0, 1, 2)
-  const deleteExpense = async (index: number): Promise<void> => {
+  const deleteExpense = async (id: number): Promise<void> => {
     // Remove o item do array usando filter
     // filter cria novo array SEM o item na posição 'index'
     const updatedExpenses: Expense[] = expenses.filter(
-      (_: Expense, i: number) => i !== index
+      (expense: Expense) => expense.id !== id
     );
 
     // Atualiza o estado (renderiza na tela)

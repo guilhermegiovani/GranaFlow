@@ -50,12 +50,12 @@ export type ExpensesContextType = {
   // deleteExpense: função que deleta gasto por índice
   // (index: number) = recebe a posição do array
   // Promise<void> = é assíncrona e não retorna nada
-  deleteExpense: (index: number) => Promise<void>;
+  deleteExpense: (id: number) => Promise<void>;
 
   // updateExpense: função que atualiza gasto
   // (index: number, updatedExpense: Expense) = posição + novo gasto
   // Promise<void> = é assíncrona e não retorna nada
-  updateExpense: (index: number, updatedExpense: Expense) => Promise<void>;
+  updateExpense: (id: number, updatedExpense: Expense) => Promise<void>;
 
   // isLoading: flag indicando se está carregando dados
   // boolean = true ou false

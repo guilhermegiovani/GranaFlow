@@ -1,14 +1,9 @@
+import formatCurrency from "@/src/utils/formatCurrency";
 import { Text, View } from "react-native";
 
 
 export default function PeriodCard({ income, expense, title, cardStyle }: { income: number; expense: number; title: string; cardStyle: any }) {
-
-    const formatCurrency = (value: number) =>
-        new Intl.NumberFormat("pt-BR", {
-            style: "currency",
-            currency: "BRL",
-        }).format(value);
-
+    
     return (
         <View style={cardStyle}>
             <Text style={{ fontSize: 14, fontWeight: "bold", marginBottom: 10 }}>

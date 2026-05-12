@@ -80,7 +80,7 @@ export default function MonthSelector(
                         <Pressable
                             style={{
                                 position: "absolute",
-                                top: 12,
+                                top: 6,
                                 right: 12,
                                 width: 32,
                                 height: 32,

@@ -5,6 +5,7 @@ import { useRouter } from "expo-router";
 // Importa o tipo Expense que criamos
 import { Expense, ExpensesContextType } from "../src/types/index";
 import { StatusBar } from 'expo-status-bar';
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 
 export default function AddExpense() {
     // Pega a função addExpense do Context (que agora salva no AsyncStorage)
@@ -22,6 +23,23 @@ export default function AddExpense() {
     // "expense" | "income" = UNION TYPE (só pode ser um dos dois)
     const [type, setType] = useState<"expense" | "income">("expense"); // Se é gasto ou ganho
     const [category, setCategory] = useState<string>("");        // Categoria (combustível, pedágio, etc)
+    const [date, setDate] = useState(new Date());     // Data
+
+    const openDatePicker = () => {
+        DateTimePickerAndroid.open({
+            value: date,
+            mode: "date",
+            is24Hour: true,
+            onChange: handleChangeDate,
+        });
+    }
+
+    const handleChangeDate = (event: any, selectedDate?: Date) => {
+        if(selectedDate) {
+            setDate(selectedDate);
+        }
+        //setShowPicker(false)
+    }
 
     return (
         <View style={{ flex: 1, padding: 20 }}>
@@ -76,6 +94,26 @@ export default function AddExpense() {
                     color: "#000"
                 }}
             />
+
+            <Pressable
+                onPress={openDatePicker}
+                style={{
+                    borderWidth: 1,
+                    borderColor: "#ccc",
+                    padding: 10,
+                    marginTop: 10,
+                    borderRadius: 8
+                }}
+            >
+                <Text
+                    style={{
+                        fontSize: 16,
+                        color: "#414141",
+                    }}
+                >
+                    📅 {date.toLocaleDateString("pt-BR")}
+                </Text>
+            </Pressable>
 
             <View style={{ flexDirection: "row", marginTop: 10 }}>
 
@@ -134,7 +172,7 @@ export default function AddExpense() {
                         value: parsedValue,
                         category,
                         type,
-                        date: new Date().toISOString(),  // Salva a data/hora atual (ISO format)
+                        date: date.toISOString(),  // Salva a data/hora atual (ISO format)
                         id: Date.now(),                  // ID único baseado no timestamp (number)
                     };
 
@@ -145,7 +183,7 @@ export default function AddExpense() {
 
                     // SALVAMENTO: Chama a função que salva no Context (e no AsyncStorage)
                     addExpense(newExpense);
-                    
+
                     // NAVEGAÇÃO: Volta para a tela anterior (home)
                     router.back();
                 }}
