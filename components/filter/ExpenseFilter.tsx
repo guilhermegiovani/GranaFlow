@@ -7,11 +7,7 @@ import FilterButton from "./FilterButton";
 
 export default function ExpenseFilter({ expenses, filter, setFilter, selectedMonth, setSelectedMonth }: { expenses: Expense[]; filter: "all" | "month" | "week" | "history"; setFilter: (value: "all" | "month" | "week" | "history") => void; selectedMonth: string; setSelectedMonth: (month: string) => void }) {
 
-    // const currentMonth = new Date().toLocaleDateString("pt-BR", {
-    //     month: "long"
-    // })
-
-    //const [selectedMonth, setSelectedMonth] = useState<string>("");
+    //const historyExpenses = getHistoryExpenses(expenses, selectedMonth);
 
     return (
         <View style={{ flexDirection: "row", gap: 10, marginBottom: 10 }}>
@@ -43,7 +39,7 @@ export default function ExpenseFilter({ expenses, filter, setFilter, selectedMon
                 }}
             />
 
-            {/* <MonthSelector expenses={expenses} filter={filter} setFilter={setFilter} selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} /> */}
+            <MonthSelector expenses={expenses} filter={filter} setFilter={setFilter} selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} />
         </View>
     )
 }

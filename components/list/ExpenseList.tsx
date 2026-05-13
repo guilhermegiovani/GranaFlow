@@ -23,10 +23,12 @@ export default function ExpenseList({ expenses, filter }: { expenses: Expense[];
         }, 500)
     }
 
+    const expensesOnly = expenses.filter(expense => expense.type === "expense");
+
     return (
         <FlatList
             ListHeaderComponent={
-                <ExpensesChart expenses={expenses} filter={filter} />
+                expensesOnly.length > 0 ? <ExpensesChart expenses={expensesOnly} filter={filter} /> : null
             }
             contentContainerStyle={{
                 paddingBottom: 75, // para dar espaço pro botão flutuante

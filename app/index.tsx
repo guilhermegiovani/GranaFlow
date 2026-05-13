@@ -1,12 +1,12 @@
 import { useRouter } from "expo-router";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { ExpensesContext } from "../src/context/ExpensesContext";
 import { exportToExcel } from "../src/utils/exportToExcel";
 // Importa os tipos que criamos
 import { Expense, ExpensesContextType } from "../src/types/index";
 
-import { getMonthlyExpenses, getWeeklyExpenses, sumByType } from "../src/utils/dateFilters";
+import { getHistoryExpenses, getMonthlyExpenses, getWeeklyExpenses, sumByType } from "../src/utils/dateFilters";
 import { StatusBar } from 'expo-status-bar';
 // import ExpensesPieChart from "@/components/Chart/ExpensesPieChart";
 // import ExpensesChart from "@/components/Chart/ExpensesChart";
@@ -30,14 +30,22 @@ export default function Home() {
         ExpensesContext
     ) as ExpensesContextType;
 
+    const [selectedMonth, setSelectedMonth] = useState<string>("");
+
     const monthlyExpenses = getMonthlyExpenses(expenses);
     const weeklyExpenses = getWeeklyExpenses(expenses);
+    const historyExpenses = selectedMonth ? getHistoryExpenses(expenses, selectedMonth) : [];
+
+    console.log("Filtered History Expenses:", historyExpenses);
 
     const monthlyIncome = sumByType(monthlyExpenses, "income");
     const monthlyExpense = sumByType(monthlyExpenses, "expense");
 
     const weeklyIncome = sumByType(weeklyExpenses, "income");
     const weeklyExpense = sumByType(weeklyExpenses, "expense");
+
+    // const historyIncome = sumByType(historyExpenses, "income");
+    // const historyExpense = sumByType(historyExpenses, "expense");
 
     const getMonthName = () => {
         const month = new Date().toLocaleDateString("pt-BR", {
@@ -75,13 +83,13 @@ export default function Home() {
             ? monthlyExpenses
             : filter === "week"
                 ? weeklyExpenses
-                : expenses;
+                : filter === "history"
+                    ? historyExpenses
+                    : expenses; // Se for "all", mostra todas as despesas
 
     const sortedExpenses = [...filteredExpenses].sort(
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
-
-    const [selectedMonth, setSelectedMonth] = useState<string>("");
 
     //console.log(getUniqueMonths(expenses));
 

@@ -32,6 +32,17 @@ export function getWeeklyExpenses(expenses: Expense[]): Expense[] {
     });
 }
 
+export function getHistoryExpenses(expenses: Expense[], month: string): Expense[] {
+    return expenses.filter((exp) => {
+        const date = new Date(exp.date);
+        const monthName = date.toLocaleDateString("pt-BR", { month: "short", year: "numeric" })!.charAt(0).toUpperCase() + date.toLocaleDateString("pt-BR", { month: "short", year: "numeric" })!.slice(1);
+        
+        console.log("Comparing:", monthName, "with", month);
+
+        return monthName === month;
+    });
+}
+
 export function sumByType(expenses: Expense[], type: "income" | "expense"): number {
   return expenses
     .filter((e) => e.type === type)
