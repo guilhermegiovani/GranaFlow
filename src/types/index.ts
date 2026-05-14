@@ -42,6 +42,11 @@ export type ExpensesContextType = {
   // Expense[] = "array de Expense" (pode ser vazio ou com vários)
   expenses: Expense[];
 
+  // importExpenses: função para importar vários gastos de uma vez
+  // (expenses: Expense[]) = recebe um array de Expense
+  // Promise<void> = é assíncrona e não retorna nada
+  importExpenses: (expenses: Expense[]) => Promise<void>;
+
   // addExpense: função que adiciona gasto
   // (expense: Expense) = recebe um Expense como parâmetro
   // Promise<void> = é assíncrona (usa await) e não retorna nada

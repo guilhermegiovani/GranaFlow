@@ -16,6 +16,7 @@ import PeriodCard from "@/components/cards/PeriodCard";
 import SummaryCard from "@/components/cards/SummaryCard";
 import getUniqueMonths from "@/src/utils/getUniqueMonths";
 import MonthSelector from "@/components/filter/MonthSelector";
+import { importFromExcel } from "@/src/utils/importFromExcel";
 
 
 
@@ -36,16 +37,11 @@ export default function Home() {
     const weeklyExpenses = getWeeklyExpenses(expenses);
     const historyExpenses = selectedMonth ? getHistoryExpenses(expenses, selectedMonth) : [];
 
-    console.log("Filtered History Expenses:", historyExpenses);
-
     const monthlyIncome = sumByType(monthlyExpenses, "income");
     const monthlyExpense = sumByType(monthlyExpenses, "expense");
 
     const weeklyIncome = sumByType(weeklyExpenses, "income");
     const weeklyExpense = sumByType(weeklyExpenses, "expense");
-
-    // const historyIncome = sumByType(historyExpenses, "income");
-    // const historyExpense = sumByType(historyExpenses, "expense");
 
     const getMonthName = () => {
         const month = new Date().toLocaleDateString("pt-BR", {
@@ -91,8 +87,6 @@ export default function Home() {
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 
-    //console.log(getUniqueMonths(expenses));
-
     return (
         <View style={{ flex: 1, padding: 20, backgroundColor: "#fff" }}>
             <StatusBar style="dark" />
@@ -116,6 +110,22 @@ export default function Home() {
                 >
                     <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 14, marginLeft: 5 }}>
                         📊 Exportar
+                    </Text>
+                </Pressable>
+
+                <Pressable
+                    onPress={() => importFromExcel()}
+                    style={{
+                        backgroundColor: "#2196F3",
+                        paddingHorizontal: 15,
+                        paddingVertical: 8,
+                        borderRadius: 6,
+                        flexDirection: "row",
+                        alignItems: "center",
+                    }}
+                >
+                    <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 14, marginLeft: 5 }}>
+                        📊 Importar
                     </Text>
                 </Pressable>
             </View>

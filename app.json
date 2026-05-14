@@ -26,6 +26,7 @@
     },
     "updates": {
       "fallbackToCacheTimeout": 0,
+      "checkAutomatically": "ON_LOAD",
       "url": "https://u.expo.dev/13d654d4-f33c-4141-a6f8-42cbd2cee345"
     },
     "runtimeVersion": {

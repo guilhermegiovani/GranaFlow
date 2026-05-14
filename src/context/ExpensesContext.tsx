@@ -88,6 +88,21 @@ export function ExpensesProvider({ children }: ExpensesProviderProps) {
     await saveExpensesToStorage(updatedExpenses);
   };
 
+  // Função para IMPORTAR vários gastos de uma vez
+  // importedExpenses: Expense[] = recebe um array de gastos tipados
+  const importExpenses = async (importedExpenses: Expense[]): Promise<void> => {
+
+    // Cria um novo array juntando:
+    // gastos antigos + gastos importados
+    const updatedExpenses: Expense[] = [...expenses, ...importedExpenses];
+
+    // Atualiza o estado (renderiza na tela)
+    setExpenses(updatedExpenses);
+
+    // Salva no AsyncStorage para persistir os dados
+    await saveExpensesToStorage(updatedExpenses);
+  };
+
   // Função para DELETAR um gasto por índice
   // index: number = recebe a posição no array (ex: 0, 1, 2)
   const deleteExpense = async (id: number): Promise<void> => {
@@ -131,6 +146,7 @@ export function ExpensesProvider({ children }: ExpensesProviderProps) {
       value={{
         expenses,
         addExpense,
+        importExpenses,
         deleteExpense,
         updateExpense,
         isLoading,
