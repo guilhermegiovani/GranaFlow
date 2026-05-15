@@ -14,13 +14,13 @@
     },
     "production": {
       "autoIncrement": true,
-      "channel": "production"
+      "channel": "production",
+      "android": {
+        "buildType": "apk"
+      }
     }
   },
   "submit": {
     "production": {}
-  },
-  "android": {
-    "buildType": "apk"
   }
 }
