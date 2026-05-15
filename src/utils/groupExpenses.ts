@@ -1,16 +1,12 @@
 import { Expense } from "@/src/types";
-import { getWeeklyExpenses } from "@/src/utils/dateFilters";
 
 
 export function groupByCategory(expenses: Expense[]) {
-    //const result = [] as { category: string; total: number }[];
     const justExpenses = expenses.filter(e => e.type === "expense")
     const result = {} as { [category: string]: number };
 
     justExpenses.forEach((expense) => {
         const category = expense.category;
-        //const total = expense.value;
-        //const existing = result.find(e => e.category === category)
 
         if (!result[category]) {
             result[category] = 0

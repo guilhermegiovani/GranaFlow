@@ -151,7 +151,7 @@ export default function AddExpense() {
                 onPress={() => {
                     // VALIDAÇÃO 1: Verifica se todos os campos foram preenchidos
                     if (!description || !value || !category) {
-                        console.log("Preencha todos os campos");
+                        alert("Preencha todos os campos");
                         return;
                     }
 
@@ -161,7 +161,7 @@ export default function AddExpense() {
 
                     // VALIDAÇÃO 2: Verifica se o valor é realmente um número válido
                     if (isNaN(parsedValue)) {
-                        console.log("Valor inválido");
+                        alert("Valor inválido");
                         return;
                     }
 

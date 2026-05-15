@@ -3,7 +3,7 @@ import * as FileSystem from "expo-file-system/legacy";
 import * as XLSX from "xlsx";
 import { ExpensesContextType } from "@/src/types/index";
 
-export const importFromExcel = async (importExpenses: ExpensesContextType["importExpenses"]) => {
+export const importFromExcel = async (importExpenses: ExpensesContextType["importExpenses"],  expenses: ExpensesContextType["expenses"]) => {
     // Implementation for importing data from Excel
     const pickDocument = async () => {
         try {
@@ -41,7 +41,18 @@ export const importFromExcel = async (importExpenses: ExpensesContextType["impor
                 };
             });
 
-            await importExpenses(importedExpenses);
+            const filteredExpenses = importedExpenses.filter((expense: any) => {
+                const exists = expenses.some((e) => e.description === expense.description && e.value === expense.value && e.date === expense.date);
+                return !exists;
+            });
+
+            if(filteredExpenses.length === 0) {
+                alert("Nenhuma nova despesa encontrada para importar.");
+                return;
+            }
+
+            await importExpenses(filteredExpenses);
+            alert("Despesas importadas com sucesso!");
 
 
         } catch (error) {

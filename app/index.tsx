@@ -27,7 +27,7 @@ export default function Home() {
     // Pega os dados do Context (agora com persistência via AsyncStorage)
     // ExpensesContextType = tipagem (valida que context tem essas funções)
     // ! = "force" (garante que não é undefined)
-    const { expenses, isLoading } = useContext(
+    const { expenses, isLoading, importExpenses } = useContext(
         ExpensesContext
     ) as ExpensesContextType;
 
@@ -96,38 +96,44 @@ export default function Home() {
                     Meus Gastos
                 </Text>
 
-                {/* BOTÃO: Exportar para Excel */}
-                <Pressable
-                    onPress={() => exportToExcel(filteredExpenses, filter)}
+                <View
                     style={{
-                        backgroundColor: "#2196F3",
-                        paddingHorizontal: 15,
-                        paddingVertical: 8,
-                        borderRadius: 6,
-                        flexDirection: "row",
-                        alignItems: "center",
+                        gap: 8,
                     }}
                 >
-                    <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 14, marginLeft: 5 }}>
-                        📊 Exportar
-                    </Text>
-                </Pressable>
+                    {/* BOTÃO: Exportar para Excel */}
+                    <Pressable
+                        onPress={() => exportToExcel(filteredExpenses, filter)}
+                        style={{
+                            backgroundColor: "#2196F3",
+                            paddingHorizontal: 15,
+                            paddingVertical: 8,
+                            borderRadius: 6,
+                            flexDirection: "row",
+                            alignItems: "center",
+                        }}
+                    >
+                        <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 14, marginLeft: 5 }}>
+                            📊 Exportar
+                        </Text>
+                    </Pressable>
 
-                <Pressable
-                    onPress={() => importFromExcel()}
-                    style={{
-                        backgroundColor: "#2196F3",
-                        paddingHorizontal: 15,
-                        paddingVertical: 8,
-                        borderRadius: 6,
-                        flexDirection: "row",
-                        alignItems: "center",
-                    }}
-                >
-                    <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 14, marginLeft: 5 }}>
-                        📊 Importar
-                    </Text>
-                </Pressable>
+                    <Pressable
+                        onPress={() => importFromExcel(importExpenses, expenses)}
+                        style={{
+                            backgroundColor: "#4CAF50",
+                            paddingHorizontal: 15,
+                            paddingVertical: 8,
+                            borderRadius: 6,
+                            flexDirection: "row",
+                            alignItems: "center",
+                        }}
+                    >
+                        <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 14, marginLeft: 5 }}>
+                            📊 Importar
+                        </Text>
+                    </Pressable>
+                </View>
             </View>
 
             {/* RESUMO: Mostra totais de ganhos, gastos e lucro */}
@@ -182,7 +188,7 @@ export default function Home() {
                 onPress={() => router.push("/add-expense")}
                 style={{
                     position: "absolute",
-                    bottom: 20,
+                    bottom: 25,
                     right: 20,
                     backgroundColor: "#4CAF50",
                     width: 60,
